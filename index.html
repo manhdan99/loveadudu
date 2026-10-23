@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bạn có thích Adu Du không? 👽💚</title>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: radial-gradient(circle at 50% 30%, #ecfdf5 0%, #a7f3d0 50%, #6ee7b7 100%);
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            min-height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .bubble {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.45);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: floatUp 8s infinite linear;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(110vh) scale(0.6); opacity: 0; }
+            30% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) scale(1.1); opacity: 0; }
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(6, 78, 59, 0.3);
+            z-index: 10;
+            backdrop-filter: blur(5px);
+            padding: 20px;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 30px 28px;
+            text-align: center;
+            box-shadow: 0 16px 40px rgba(6, 78, 59, 0.22), 0 0 0 6px #d1fae5;
+            max-width: 420px;
+            width: 100%;
+            border: 3px dashed #10b981;
+            animation: cardPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            z-index: 12;
+        }
+
+        @keyframes cardPop {
+            0% { transform: scale(0.7); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .avatar-wrap {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 14px auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            filter: drop-shadow(0 8px 18px rgba(16, 185, 129, 0.35));
+            animation: cuteWobble 3s infinite ease-in-out;
+        }
+
+        @keyframes cuteWobble {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            35% { transform: translateY(-7px) rotate(-3deg); }
+            70% { transform: translateY(-4px) rotate(3deg); }
+        }
+
+        .adudu-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 22px;
+            border: 3px solid #34d399;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #10b981;
+            color: white;
+            font-size: 13px;
+            font-weight: 800;
+            padding: 4px 14px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            box-shadow: 0 3px 8px rgba(16, 185, 129, 0.3);
+        }
+
+        .title {
+            font-size: 23px;
+            font-weight: 800;
+            color: #065f46;
+            margin-bottom: 6px;
+            line-height: 1.35;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #059669;
+            margin-bottom: 22px;
+            font-weight: 600;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn {
+            border: none;
+            padding: 13px 26px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 800;
+            font-family: inherit;
+            transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #ffffff;
+            box-shadow: 0 6px 16px rgba(5, 150, 105, 0.35);
+        }
+
+        .btn-yes:hover {
+            transform: scale(1.08) translateY(-2px);
+            box-shadow: 0 8px 22px rgba(5, 150, 105, 0.45);
+        }
+
+        .btn-no {
+            background: #f1f5f9;
+            color: #64748b;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            border: 2px solid #e2e8f0;
+        }
+
+        .btn-no:hover {
+            background: #fee2e2;
+            color: #ef4444;
+            border-color: #fca5a5;
+            transform: scale(1.04);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .scare-stage {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 9999;
+            display: none;
+            background-color: black;
+            overflow: hidden;
+        }
+
+        .scare-stage.active {
+            display: block;
+            animation: strobeLight 0.05s infinite;
+        }
+
+        @keyframes strobeLight {
+            0% { background-color: #000000; }
+            20% { background-color: #ff0000; }
+            40% { background-color: #ffffff; }
+            60% { background-color: #00ff66; }
+            80% { background-color: #ff0055; }
+            100% { background-color: #000000; }
+        }
+
+        .scare-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+            opacity: 0.01;
+            pointer-events: none;
+        }
+
+        .screamer-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 2;
+            transform-origin: center center;
+            animation: crazyFlicker 0.05s infinite, zoomPunch 0.4s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+        }
+
+        @keyframes crazyFlicker {
+            0% {
+                filter: invert(0%) contrast(200%) brightness(120%) hue-rotate(0deg);
+                transform: scale(var(--base-scale, 1.15)) translate(0px, 0px) rotate(0deg);
+            }
+            12% {
+                filter: invert(100%) contrast(400%) brightness(180%) hue-rotate(180deg);
+                transform: scale(var(--base-scale, 1.15)) translate(-32px, 20px) rotate(-5deg);
+            }
+            25% {
+                filter: invert(0%) contrast(550%) brightness(260%) hue-rotate(90deg);
+                transform: scale(var(--base-scale, 1.15)) translate(28px, -26px) rotate(5deg);
+            }
+            37% {
+                filter: invert(100%) contrast(650%) brightness(140%) hue-rotate(270deg);
+                transform: scale(var(--base-scale, 1.15)) translate(-24px, -32px) rotate(-4deg);
+            }
+            50% {
+                filter: invert(0%) contrast(300%) brightness(85%) hue-rotate(0deg);
+                transform: scale(var(--base-scale, 1.15)) translate(36px, 18px) rotate(4deg);
+            }
+            62% {
+                filter: invert(100%) contrast(500%) brightness(220%) hue-rotate(120deg);
+                transform: scale(var(--base-scale, 1.15)) translate(-30px, 28px) rotate(-5deg);
+            }
+            75% {
+                filter: invert(0%) contrast(700%) brightness(350%) hue-rotate(300deg);
+                transform: scale(var(--base-scale, 1.15)) translate(32px, -22px) rotate(5deg);
+            }
+            87% {
+                filter: invert(100%) contrast(450%) brightness(190%) hue-rotate(60deg);
+                transform: scale(var(--base-scale, 1.15)) translate(-34px, -16px) rotate(-3deg);
+            }
+            100% {
+                filter: invert(0%) contrast(200%) brightness(120%) hue-rotate(0deg);
+                transform: scale(var(--base-scale, 1.15)) translate(0px, 0px) rotate(0deg);
+            }
+        }
+
+        @keyframes zoomPunch {
+            0% { --base-scale: 1.05; }
+            50% { --base-scale: 1.55; }
+            100% { --base-scale: 1.85; }
+        }
+
+        .vhs-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.35),
+                rgba(0, 0, 0, 0.35) 2px,
+                transparent 2px,
+                transparent 4px
+            );
+            z-index: 3;
+            mix-blend-mode: overlay;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="bubble" style="width: 25px; height: 25px; left: 10%; animation-duration: 7s;"></div>
+    <div class="bubble" style="width: 45px; height: 45px; left: 25%; animation-duration: 9s; animation-delay: 2s;"></div>
+    <div class="bubble" style="width: 20px; height: 20px; left: 70%; animation-duration: 6s; animation-delay: 1s;"></div>
+    <div class="bubble" style="width: 35px; height: 35px; left: 85%; animation-duration: 8s; animation-delay: 3s;"></div>
+
+    <div id="overlay" class="overlay">
+        <div class="card">
+            <div class="badge">Ata Ta Tiga • Adu Du 👽</div>
+
+            <div class="avatar-wrap">
+                <img id="adudu-avatar" class="adudu-img" src="adudu_cute.png" alt="Adu Du">
+            </div>
+
+            <h1 class="title">Bạn có thích Adu Du không? 👽💚</h1>
+            <p class="subtitle">Đừng nói dối tớ nhé... 👉👈</p>
+
+            <div class="button-group">
+                <button id="accept-button" class="btn btn-yes">💚 Thích lắm!</button>
+                <button id="decline-button" class="btn btn-no">❌ Không thích</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="scare-stage" class="scare-stage">
+        <video id="video-source" class="scare-video" src="scare.mp4" playsinline preload="auto" loop></video>
+        <img id="screamer-image" class="screamer-img" src="adudu_screamer.jpg" alt="ADUDU SCREAMER">
+        <div class="vhs-overlay"></div>
+    </div>
+
+    <script>
+        const overlay = document.getElementById("overlay");
+        const scareStage = document.getElementById("scare-stage");
+        const videoSource = document.getElementById("video-source");
+        const acceptButton = document.getElementById("accept-button");
+        const declineButton = document.getElementById("decline-button");
+
+        function triggerShockScream() {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                const ctx = new AudioContext();
+
+                const osc1 = ctx.createOscillator();
+                const gain1 = ctx.createGain();
+                osc1.type = 'sawtooth';
+                osc1.frequency.setValueAtTime(1500, ctx.currentTime);
+                osc1.frequency.exponentialRampToValueAtTime(320, ctx.currentTime + 1.2);
+                gain1.gain.setValueAtTime(1.0, ctx.currentTime);
+                gain1.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 1.5);
+                osc1.connect(gain1);
+                gain1.connect(ctx.destination);
+                osc1.start();
+                osc1.stop(ctx.currentTime + 1.5);
+
+                const osc2 = ctx.createOscillator();
+                const gain2 = ctx.createGain();
+                osc2.type = 'triangle';
+                osc2.frequency.setValueAtTime(160, ctx.currentTime);
+                osc2.frequency.exponentialRampToValueAtTime(30, ctx.currentTime + 0.9);
+                gain2.gain.setValueAtTime(1.2, ctx.currentTime);
+                gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.9);
+                osc2.connect(gain2);
+                gain2.connect(ctx.destination);
+                osc2.start();
+                osc2.stop(ctx.currentTime + 0.9);
+            } catch (err) {}
+        }
+
+        function triggerJumpscare() {
+            overlay.style.display = 'none';
+            scareStage.classList.add('active');
+
+            if (scareStage.requestFullscreen) {
+                scareStage.requestFullscreen().catch(() => {});
+            } else if (scareStage.webkitRequestFullscreen) {
+                scareStage.webkitRequestFullscreen();
+            }
+
+            videoSource.currentTime = 0;
+            videoSource.volume = 1.0;
+            videoSource.muted = false;
+            videoSource.play().catch(() => {});
+
+            triggerShockScream();
+        }
+
+        acceptButton.addEventListener("click", triggerJumpscare);
+        declineButton.addEventListener("click", triggerJumpscare);
+    </script>
+
+</body>
+
+</html>
